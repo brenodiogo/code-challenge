@@ -3,6 +3,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Queue;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -10,18 +11,37 @@ import java.util.stream.IntStream;
 public class CoffeeShop {
 
     // 3 instance variables
-    private static String name;
-    private static ArrayList<MenuItem> menu;
-    private static Queue<String> orders;
+    private String name;
+    private MenuItem[] menuAsArray;
+    private ArrayList<MenuItem> menu;
+    private Queue<String> orders;
+    private String[] ordersAsArray;
 
     public static void main(String[] args) {
-        initializeApplication();
-        testApplication();
     }
 
-    private static void initializeApplication() {
+    public CoffeeShop(String name, MenuItem[] menu, String[] orders) {
+        this.name = name;
+        this.menuAsArray = menu;
+        this.ordersAsArray = orders;
+        this.menu = new ArrayList<MenuItem>();
+        this.orders = new LinkedList<String>();
+
+        for (MenuItem item : menu) {
+            this.menu.add(item);
+        }
+
+        if (orders != null) {
+
+            for (String order : orders) {
+                this.orders.add(order);
+            }
+        }
+    }
+
+    private void initializeApplication() {
         System.out.println("Initializing The Coffe Shop");
-        menu = new ArrayList<MenuItem>();
+        this.menu = new ArrayList<MenuItem>();
         for (int x = 0; x <= 10; x++) {
             String itemType = "drink";
             if (x > 5) {
@@ -33,10 +53,10 @@ public class CoffeeShop {
         orders = new LinkedList<String>();
         System.out.println(addOrder("Item 1"));
         System.out.println(addOrder("Item 2"));
-        
+
     }
 
-    private static void testApplication() {
+    private void testApplication() {
         System.out.println(addOrder("Item 3")); // Existing item
         System.out.println(addOrder("Item not on the menu")); // Non Existing item
         System.out.println(fulfillOrder());
@@ -51,46 +71,49 @@ public class CoffeeShop {
     }
 
     // 7 methods
-    private static String addOrder(String itemName) {
-        if (menu.stream().anyMatch(item -> item.getItem().equals(itemName))) {
-            orders.add(itemName);
+    public String addOrder(String itemName) {
+        if (this.menu.stream().anyMatch(item -> item.getItem().equals(itemName))) {
+            this.orders.add(itemName);
         } else {
             return "This item is currently unavailable!";
         }
-        return "Item successfully added.";
+        return "Order added!";
     }
 
-    private static String fulfillOrder() {
+    public String fulfillOrder() {
         if (orders == null || orders.size() == 0) {
             return "All orders have been fulfilled!";
         }
-        var item = orders.poll();
+        String item = orders.poll();
         return "The " + item + " is ready!";
     }
 
-    private static String listOrders() {
-        return orders.toString();
+    public String[] listOrders() {
+        String[] arr = new String[orders.size()];
+        return orders.toArray(arr);
     }
 
-    private static double dueAmount() {
+    public double dueAmount() {
         BigDecimal totalAmount = new BigDecimal(0);
-        for (var order : orders) {
-            var menuItem = menu.stream().filter(item -> item.getItem().equals(order)).findFirst();
+        for (String order : orders) {
+            Optional<MenuItem> menuItem = menu.stream().filter(item -> item.getItem().equals(order)).findFirst();
             totalAmount = totalAmount.add(BigDecimal.valueOf(menuItem.get().getPrice()));
         }
         return totalAmount.doubleValue();
     }
 
-    private static String cheapestItem() {
+    public String cheapestItem() {
         return menu.stream().min(Comparator.comparing(MenuItem::getPrice)).get().getItem();
     }
 
-    private static List<String> drinksOnly() {
-        return menu.stream().filter(item -> item.getType().equals("drink")).map(item -> item.getItem()).collect(Collectors.toList());
+    public String[] drinksOnly() {
+        return menu.stream().filter(item -> item.getType().equals("drink")).map(item -> item.getItem())
+                .toArray(String[]::new);
     }
 
-    private static List<String> foodOnly() {
-        return menu.stream().filter(item -> item.getType().equals("food")).map(item -> item.getItem()).collect(Collectors.toList());
+    public String[] foodOnly() {
+        return menu.stream().filter(item -> item.getType().equals("food")).map(item -> item.getItem())
+                .toArray(String[]::new);
     }
 
 }
