@@ -10,7 +10,6 @@ import java.util.stream.IntStream;
 
 public class CoffeeShop {
 
-    // 3 instance variables
     private String name;
     private MenuItem[] menuAsArray;
     private ArrayList<MenuItem> menu;
@@ -54,20 +53,6 @@ public class CoffeeShop {
         System.out.println(addOrder("Item 1"));
         System.out.println(addOrder("Item 2"));
 
-    }
-
-    private void testApplication() {
-        System.out.println(addOrder("Item 3")); // Existing item
-        System.out.println(addOrder("Item not on the menu")); // Non Existing item
-        System.out.println(fulfillOrder());
-        System.out.println(fulfillOrder());
-        System.out.println(fulfillOrder());
-        System.out.println(fulfillOrder());
-        System.out.println(drinksOnly());
-        System.out.println("foodOnly()");
-        System.out.println(foodOnly());
-        listOrders();
-        System.out.println(fulfillOrder());
     }
 
     // 7 methods
