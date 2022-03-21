@@ -1,7 +1,5 @@
 package com.brenodiogo;
 
-import java.util.*;
-
 /**
  * Hello world!
  *
@@ -16,24 +14,30 @@ public class App {
         if (num == 6174) {
             return 0;
         }
-        String currentNumber = String.valueOf(num);
-        while (currentNumber.length() < 4) {
-            currentNumber = "0" + currentNumber;
+
+        // Put number into an array
+        int[] number = new int[4];
+        for (int i = 0; i <= 3; i++) {
+            number[i] = num % 10;
+            num = num / 10;
         }
 
-        ArrayList<Character> orderedNumbers = new ArrayList<Character>();
-        for (char c : currentNumber.toCharArray()) {
-            orderedNumbers.add(c);
+        // Sort number
+        int j = 0;
+        while (j < 4) {
+            for (int i = 0; i <= 2; i++) {
+                if (number[i] > number[i + 1]) {
+                    int aux = number[i];
+                    number[i] = number[i + 1];
+                    number[i + 1] = aux;
+                }
+            }
+            j++;
         }
 
-        Collections.sort(orderedNumbers);   
-
-
-        int firstNumber = Integer.parseInt(orderedNumbers.get(0).toString()+orderedNumbers.get(1).toString()+orderedNumbers.get(2).toString()+orderedNumbers.get(3).toString());
-        int secondNumber = Integer.parseInt(orderedNumbers.get(3).toString()+orderedNumbers.get(2).toString()+orderedNumbers.get(1).toString()+orderedNumbers.get(0).toString());;
-        int result = Math.abs(firstNumber-secondNumber);
-        result = Math.abs(firstNumber-secondNumber);
-
+        int firstNumber = number[0] * 1000 + number[1] * 100 + number[2] * 10 + number[3];
+        int secondNumber = number[3] * 1000 + number[2] * 100 + number[1] * 10 + number[0];
+        int result = Math.abs(firstNumber - secondNumber);
 
         return 1 + kaprekar(result);
     }
